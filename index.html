@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Landings spot</title>
+    <title>Landing spot</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -14,15 +15,25 @@
           <h1>Welcome back</h1>
           <p>
             This beatiful country called Cuba is a true paradise. You'll be spending some time in Cienfuegos enjoying the culture and the weather. To give you some inspiration, we've selected some places to visit and some hotels where you can relax. Enjoy&#33;
-          </p>
+          </p>  
         </div>
         <div id="legenda">
             <ul class="liststyle">
               <li>Airport</li>
               <li>Restaurants</li>
-              <li>Cocktail bar</li>
+              <li>Cocktail bars</li>
               <li>Hotels</li>
             </ul>
+        </div>
+        <div id="wrapper">
+          <div class="weather-box">
+            <div class="weather-icon-wrapper"></div>
+            <div class="weather-box-content">
+              <div class="weather-location"></div>
+              <div class="weather-sky-info"></div>
+              <div class="weather-temp"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,3 @@
-// fetch('https://api.artsy.net/api/genes/cuba')
-
 var map, infoWindow;
 
 //locatie van het vliegveld wordt hier geselecteerd
@@ -57,6 +55,24 @@ var hotelsmap = {
   },
 };
 
+// //Alle locaties voor de markers
+var locations = [
+  ['Landing Spot', 22.15, -80.41388699999999],
+  ['Dona Nora', 22.140327901732523, -80.4490613937378],
+  ['Panaderia Especial Calzada', 22.15219305166692, -80.43924182653427],
+  ['Restaurante Drake Club', 22.125758435694422, -80.44171214103699],
+  ['Casa Prado', 22.131681811028013, -80.44981241226196],
+  ['La Quirosana', 22.153137053306995, -80.43795704841614],
+  ['Dolores', 22.151060241340467, -80.4407250881195],
+  ['Sol y Mar', 22.13607945796864, -80.44799387454987],
+  ['Suenos de Juventud', 22.146911494104227, -80.44001162052155],
+  ['Hostel Sabina', 22.129008372120907, -80.44734477996826],
+  ['Hostal La Ganga', 22.1305418, -80.4489663],
+  ['Hostal concordia 404', 22.1490383, -80.44047539999997],
+  ['Palacio Azul', 22.1270344, -80.45122129999999]
+];
+
+//Google Maps
 function initMap() {
   var uluru = {lat: 22.15, lng: -80.41388699999999};
 
@@ -68,50 +84,55 @@ function initMap() {
       mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
               'styled_map']
     }
-  }); 
+  });
 
-  // var image = {
-  //   url: 'images/marker.svg',
-  //   scaledSize: new google.maps.Size(50,50),
-  //   origin: new google.maps.Point(0,0),
-  //   anchor: new google.maps.Point(0,32)
-  // }
+//Locaties van de markers en de afbeelding
+  var image = {
+    url: 'images/marker.svg',
+    scaledSize: new google.maps.Size(50,50),
+    origin: new google.maps.Point(0,0),
+    anchor: new google.maps.Point(25,45)
+  }
 
-  // var marker = new google.maps.Marker({
-  //   position: uluru,
-  //   map: map,
-  //   icon:image
-  // });
+  var infowindow = new google.maps.InfoWindow();
 
-  // // var iconBase = 'images/marker.svg';
-  // // var icons = {
-  // //   places: {
-  // //     icon: iconBase + 'images/marker.svg'
-  // //   },
-  // // };
+  //Geolocation 
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
 
-  // var features = [
-  //   {
-  //     position: new google.maps.LatLng(22.15, -80.41388699999999),
-  //   }, {
-  //     position: new google.maps.LatLng(22.140327901732523, -80.4490613937378),
-  //   },
-  //   {
-  //     position: new google.maps.LatLng(22.15219305166692, -80.43924182653427),
-  //   }
-  // ];
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Location found.');
+      infoWindow.open(map);
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 
-  // var infowindow = new google.maps.InfoWindow({
-  //   content: contentString
-  // });
+  //Markers op locaties toevoegen
+  var marker, i;
 
-  // marker.addListener('click', function() {
-  //   infowindow.open(map, marker);
-  // });
+  for (i = 0; i < locations.length; i++) {  
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+      map: map,
+      icon:image
+  });
 
-  // marker.addListener('click', function() {
-  //   infowindow.open(map, marker);
-  // }); 
+  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    return function() {
+      infowindow.setContent(locations[i][0]);
+      infowindow.open(map, marker);
+    }
+  })(marker, i));
+  }
 
   //Het plaatsen van een cirkel om de airport
   for (var airport in airportmap) {
@@ -168,8 +189,6 @@ function initMap() {
       radius: 80
     });
   }
-
-  //De markers om de locaties
 
   //De opmaak van de kaart
   var styledMapType = new google.maps.StyledMapType(
@@ -230,9 +249,83 @@ function initMap() {
   map.setMapTypeId('styled_map');
 }
 
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
+}
+
+//Het weer. Alleen van de geselecteerde stad
+
+// (() => {
+//   let url = '';
+//   let weatherIcon = document.querySelector('.weather-icon-wrapper');
+//   let weatherInfo = document.querySelector('.weather-sky-info');
+//   let weatherLocation = document.querySelector('.weather-location');
+//   let weatherTemp = document.querySelector('.weather-temp');
+  
+//   const getIcon = (iconValue) => {
+//     const iconUrl = 'https://openweathermap.org/img/w/' + iconValue + '.png';
+//     let imgElement = document.createElement('img');
+//     imgElement.src = iconUrl;
+//     return imgElement;
+//   };
+  
+//   const changeMetric = () => {
+//     let urlParts = url.split('units=');
+//     let iconString = '';
+//     let newMetric = () => {
+//       if(urlParts[1] === 'metric'){
+//         iconString = ' °F';
+//         return 'imperial';
+//       }
+//       iconString = ' °C';
+//       return 'metric';
+//     };
+//     url = urlParts[0] + 'units=' + newMetric();
+//     $.ajax({
+//       url
+//     }).done((data) => {
+//       weatherTemp.innerHTML = data.main.temp + iconString;
+//     });
+//   }
+  
+//   const getWeather = (pos) => {
+//     const lat = pos[0];
+//     const lon = pos[1];
+//     const apiKey = 'AIzaSyDpVHur421EgO8CCZiHJ5cD_Yh17Y';
+//     url = 'https://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lon + '&APPID=' + apiKey + '&units=metric';
+    
+//     $.ajax({
+//       url
+//     }).done((data) => {
+//       let weatherData = data.weather[0];
+//       weatherInfo.innerHTML = 'Sky: ' + weatherData.main;
+//       weatherIcon.appendChild(getIcon(weatherData.icon));
+//       weatherLocation.innerHTML = data.name + ', ' + data.sys.country;
+//       weatherTemp.innerHTML = data.main.temp + ' °C';
+//     });
+//   };
+  
+//   $.getJSON('https://ipinfo.io', (data) => {
+//     getWeather(data.loc.split(','));
+//     weatherTemp.addEventListener('click', () => changeMetric());
+//   });
+// })();
+
+// function getAPIdata(){
+//   //Het huidige weer
+//   fetch('http://api.openweathermap.org/data/2.5/forecast?id=3564124&APPID=AIzaSyDpVHur421EgO8CCZiHJ5cD_Yh17YuA3TM');
+//   document.getElementById('weather').innerHTML = "het weer";
+// }
 
 
 
+
+// // init data stream
+// getAPIdata()
 
 
 // var myLatlng = new google.maps.LatLng(22.149578,-80.413671);
