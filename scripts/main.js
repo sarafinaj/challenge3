@@ -327,24 +327,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 // // init data stream
 // getAPIdata()
 
-
-// var myLatlng = new google.maps.LatLng(22.149578,-80.413671);
-// var mapOptions = {
-//   zoom: 4,
-//   center: myLatlng
-// }
-// var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-// var marker = new google.maps.Marker({
-//     position: myLatlng,
-//     title:"Hello World!"
-// });
-
-// To add the marker to the map, call setMap();
-// marker.setMap(map);
-
-
-
 // function showDog(image){
 //   console.log(image);
 
