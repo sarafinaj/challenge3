@@ -86,7 +86,7 @@ function initMap() {
     }
   });
 
-//Locaties van de markers en de afbeelding
+  //Locaties van de markers en de afbeelding
   var image = {
     url: 'images/marker.svg',
     scaledSize: new google.maps.Size(50,50),
@@ -95,26 +95,6 @@ function initMap() {
   }
 
   var infowindow = new google.maps.InfoWindow();
-
-  //Geolocation 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
-      infoWindow.open(map);
-      map.setCenter(pos);
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
 
   //Markers op locaties toevoegen
   var marker, i;
@@ -249,138 +229,59 @@ function initMap() {
   map.setMapTypeId('styled_map');
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-  infoWindow.open(map);
-}
-
 //Het weer. Alleen van de geselecteerde stad
-
-// (() => {
-//   let url = '';
-//   let weatherIcon = document.querySelector('.weather-icon-wrapper');
-//   let weatherInfo = document.querySelector('.weather-sky-info');
-//   let weatherLocation = document.querySelector('.weather-location');
-//   let weatherTemp = document.querySelector('.weather-temp');
+(() => {
+  let url = '';
+  let weatherIcon = document.querySelector('.weather-icon-wrapper');
+  let weatherInfo = document.querySelector('.weather-sky-info');
+  let weatherLocation = document.querySelector('.weather-location');
+  let weatherTemp = document.querySelector('.weather-temp');
   
-//   const getIcon = (iconValue) => {
-//     const iconUrl = 'https://openweathermap.org/img/w/' + iconValue + '.png';
-//     let imgElement = document.createElement('img');
-//     imgElement.src = iconUrl;
-//     return imgElement;
-//   };
+  const getIcon = (iconValue) => {
+    const iconUrl = 'https://openweathermap.org/img/w/' + iconValue + '.png';
+    let imgElement = document.createElement('img');
+    imgElement.src = iconUrl;
+    return imgElement;
+  };
   
-//   const changeMetric = () => {
-//     let urlParts = url.split('units=');
-//     let iconString = '';
-//     let newMetric = () => {
-//       if(urlParts[1] === 'metric'){
-//         iconString = ' °F';
-//         return 'imperial';
-//       }
-//       iconString = ' °C';
-//       return 'metric';
-//     };
-//     url = urlParts[0] + 'units=' + newMetric();
-//     $.ajax({
-//       url
-//     }).done((data) => {
-//       weatherTemp.innerHTML = data.main.temp + iconString;
-//     });
-//   }
+  const changeMetric = () => {
+    let urlParts = url.split('units=');
+    let iconString = '';
+    let newMetric = () => {
+      if(urlParts[1] === 'metric'){
+        iconString = ' °F';
+        return 'imperial';
+      }
+      iconString = ' °C';
+      return 'metric';
+    };
+    url = urlParts[0] + 'units=' + newMetric();
+    $.ajax({
+      url
+    }).done((data) => {
+      weatherTemp.innerHTML = data.main.temp + iconString;
+    });
+  }
   
-//   const getWeather = (pos) => {
-//     const lat = pos[0];
-//     const lon = pos[1];
-//     const apiKey = 'AIzaSyDpVHur421EgO8CCZiHJ5cD_Yh17Y';
-//     url = 'https://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lon + '&APPID=' + apiKey + '&units=metric';
+  const getWeather = (pos) => {
+    const lat = pos[0];
+    const lon = pos[1];
+    const apiKey = 'b1fe6ee6f440711a41fa920141f88af5';
+    url = 'https://api.openweathermap.org/data/2.5/weather?lat='+ 22.160366 + '&lon=' + -80.439379 + '&APPID=' + apiKey + '&units=metric';
     
-//     $.ajax({
-//       url
-//     }).done((data) => {
-//       let weatherData = data.weather[0];
-//       weatherInfo.innerHTML = 'Sky: ' + weatherData.main;
-//       weatherIcon.appendChild(getIcon(weatherData.icon));
-//       weatherLocation.innerHTML = data.name + ', ' + data.sys.country;
-//       weatherTemp.innerHTML = data.main.temp + ' °C';
-//     });
-//   };
+    $.ajax({
+      url
+    }).done((data) => {
+      let weatherData = data.weather[0];
+      weatherInfo.innerHTML = 'Sky: ' + weatherData.main;
+      weatherIcon.appendChild(getIcon(weatherData.icon));
+      weatherLocation.innerHTML = data.name + ', ' + data.sys.country;
+      weatherTemp.innerHTML = data.main.temp + ' °C';
+    });
+  };
   
-//   $.getJSON('https://ipinfo.io', (data) => {
-//     getWeather(data.loc.split(','));
-//     weatherTemp.addEventListener('click', () => changeMetric());
-//   });
-// })();
-
-// function getAPIdata(){
-//   //Het huidige weer
-//   fetch('http://api.openweathermap.org/data/2.5/forecast?id=3564124&APPID=AIzaSyDpVHur421EgO8CCZiHJ5cD_Yh17YuA3TM');
-//   document.getElementById('weather').innerHTML = "het weer";
-// }
-
-
-
-
-// // init data stream
-// getAPIdata()
-
-// function showDog(image){
-//   console.log(image);
-
-//   //create a marker for de Haagse Hogeschool
-//   var image = {
-
-//   };
-
-//   //create a marker for de Haagse Hogeschool
-//   var hhsMarker = new google.maps.Marker({
-//     position: {
-//       lat: 52.318512,
-//       lng: 4.642839
-//     }
-//     icon: image,
-//     man: myMap,
-    
-//   })
-// }
-
-// function getAPIdata() {
-
-//   // get latest weather
-//   fetch('https://www.rijksmuseum.nl/api/nl/collection?q=Rembrandt&key=fpGQTuED&format=json')
-  
-//   // parse to JSON format
-//   .then(function(response) {
-//     return response.json();
-//   })
-  
-//   // render weather per day
-//   .then(function(response) {
-
-//     // show full JSON object
-//     //console.log(response.artObjects[0].headerImage.url);
-
-//     var image = response.artObjects[0].headerImage.url;
-//     document.getElementById('rijks').innerHTML = '<img src="' + image + '" />';
-//     //document.getElementById('dogs').src = response.message;
-
-//     //for(var i = 0; i < response.list.length; i++) {
-//       //console.log(response.list[i]);
-//       //console.log(response.list[i].dt);
-//       //console.log(response.list[i].dt_txt);
-//       // etc.
-//     //}
-
-//   })
-  
-//   // catch error
-//   .catch(function (error) {
-//     console.error('Request failed', error);
-//   });
-// }
-
-// // init data stream
-// getAPIdata();
+  $.getJSON('https://ipinfo.io', (data) => {
+    getWeather(data.loc.split(','));
+    weatherTemp.addEventListener('click', () => changeMetric());
+  });
+})();
